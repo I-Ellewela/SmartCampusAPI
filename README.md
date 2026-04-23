@@ -1,9 +1,9 @@
 # Smart Campus Sensor & Room Management API
 
-**Module:** 5COSC022W Client-Server Architectures
-**Student:** E.K Ishini Upekha Ellewela
-**Student ID:** 20230898
-**Year:** 2026
+**Module:** 5COSC022W Client-Server Architectures  
+**Student:** E.K Ishini Upekha Ellewela  
+**Student ID:** 20230898  
+**Year:** 2025/26
 
 ---
 
