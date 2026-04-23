@@ -1,8 +1,8 @@
 # Smart Campus Sensor & Room Management API
 
-**Module:** 5COSC022W Client-Server Architectures  
-**Student:** E.K Ishini Upekha Ellewela  
-**Year:** 2026  
+**Module:** 5COSC022W Client-Server Architectures
+**Student:** E.K Ishini Upekha Ellewela
+**Year:** 2026
 
 ---
 
@@ -321,6 +321,26 @@ exposes multiple categories of exploitable information:
 5. **Database schema hints**: ORM-generated traces (Hibernate, JPA) often include table names, column names, and query structures.
 
 The `GlobalExceptionMapper` in this API solves this by logging the full stack trace **server-side only** (via `java.util.logging`) while returning a sanitised, generic `500` message to the client — protecting internals without losing debuggability for system administrators.
+
+---
+
+### Part 5.5 — JAX-RS Logging Filters
+
+**Question:** Why is it advantageous to use JAX-RS filters for cross-cutting concerns like logging, rather than manually inserting `Logger.info()` statements inside every single resource method?
+
+Using a JAX-RS filter for logging is advantageous for several important reasons:
+
+1. **Single Responsibility Principle**: Resource classes should handle business logic only. Embedding logging statements inside every resource method violates the Single Responsibility Principle — the class now has two jobs: handle the request AND log it. A dedicated filter separates these concerns cleanly.
+
+2. **No Code Duplication**: With manual logging, every single resource method (GET rooms, POST rooms, GET sensors, POST sensors, etc.) needs its own `Logger.info()` calls. If the log format ever changes, every method must be updated individually. A single filter handles all requests automatically with zero duplication.
+
+3. **Guaranteed Coverage**: A manual approach risks developers forgetting to add logging to new methods as the API grows. A filter registered with `@Provider` intercepts every single request and response automatically — it is impossible to miss an endpoint.
+
+4. **Consistency**: All log entries follow exactly the same format because they all pass through the same filter code, making logs easier to parse and analyse with aggregation tools like ELK Stack (Elasticsearch, Logstash, Kibana) or AWS CloudWatch.
+
+5. **Separation of Concerns**: Logging is a cross-cutting concern — it applies uniformly across the entire application, not to any specific business operation. JAX-RS filters are designed precisely for cross-cutting concerns, alongside authentication, CORS headers, and response compression.
+
+The `LoggingFilter` in this API implements both `ContainerRequestFilter` and `ContainerResponseFilter`, logging the HTTP method, full URI, and response status code for every single interaction without touching any resource class.
 
 ---
 
